@@ -9,10 +9,7 @@
 </p>
 
 <p align="center">
-  <sup>1</sup> Ajman University, Ajman, United Arab Emirates<br>
-  <sup>2</sup> University of Birmingham, Birmingham, United Kingdom<br>
-  <sup>3</sup> Khalifa University, Abu Dhabi, United Arab Emirates<br>
-  <sup>4</sup> University of Western Australia, Australia
+  <small><sup>1</sup> Ajman University, UAE · <sup>2</sup> University of Birmingham, UK · <sup>3</sup> Khalifa University, UAE · <sup>4</sup> University of Western Australia, Australia</small>
 </p>
 
 <p align="center">
