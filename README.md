@@ -26,7 +26,7 @@ We introduce CheXGround, a region-grounded longitudinal chest X-ray language mod
 
 <p align="center">
   <a href="assets/task-overview.png">
-    <img src="assets/task-overview.png" alt="Overview of the grounded radiology tasks" width="49%">
+    <img src="assets/task-overview.png" alt="Overview of the grounded radiology tasks" width="75%">
   </a>
 </p>
 
