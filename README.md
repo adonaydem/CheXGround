@@ -5,7 +5,14 @@
 </p>
 
 <p align="center">
-  Adonay Demewez Gebremedhin · Wessam Shehieb · Sara Alansari · Mohamad Alansari · Muzammal Naseer · Sajid Javed · Naoufel Werghi
+  Adonay Demewez Gebremedhin<sup>1</sup> · Wessam Shehieb<sup>1</sup> · Sara Alansari<sup>2</sup> · Mohamad Alansari<sup>3</sup> · Muzammal Naseer<sup>3,4</sup> · Sajid Javed<sup>3</sup> · Naoufel Werghi<sup>3</sup>
+</p>
+
+<p align="center">
+  <sup>1</sup> Ajman University, Ajman, United Arab Emirates<br>
+  <sup>2</sup> University of Birmingham, Birmingham, United Kingdom<br>
+  <sup>3</sup> Khalifa University, Abu Dhabi, United Arab Emirates<br>
+  <sup>4</sup> University of Western Australia, Australia
 </p>
 
 <p align="center">
