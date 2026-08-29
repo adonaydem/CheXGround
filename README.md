@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  Adonay Demewez Gebremedhin<sup>1</sup> · Wessam Shehieb<sup>1</sup> · Sara Alansari<sup>2</sup> · Mohamad Alansari<sup>3</sup> · Muzammal Naseer<sup>3,4</sup> · Sajid Javed<sup>3</sup> · Naoufel Werghi<sup>3</sup>
+  Adonay Demewez Gebremedhin<sup>1</sup> · <a href="https://scholar.google.com/citations?user=5oaOk_YAAAAJ&amp;hl=en">Wessam Shehieb</a><sup>1</sup> · Sara Alansari<sup>2</sup> · <a href="https://github.com/HamadYA">Mohamad Alansari</a><sup>3</sup> · Muzammal Naseer<sup>3,4</sup> · Sajid Javed<sup>3</sup> · Naoufel Werghi<sup>3</sup>
 </p>
 
 <p align="center">
