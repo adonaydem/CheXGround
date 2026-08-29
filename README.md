@@ -1,4 +1,8 @@
 <p align="center">
+  <img src="assets/logo.jpeg" alt="CheXGround logo" width="72">
+</p>
+
+<p align="center">
   <h1 align="center">
     <strong>CheXGround: Anatomical Region Tokens for Grounded Longitudinal Chest X-ray Interpretation</strong>
   </h1>
@@ -20,9 +24,24 @@
 
 We introduce CheXGround, a region-grounded longitudinal chest X-ray language model that represents paired studies through corresponding anatomical regions. CheXGround extracts anatomical regions from current and prior radiographs, encodes them as temporally enhanced Region-of-Interest (ROI) tokens, and combines them with global temporal image context during generation. To connect these region tokens with clinical language represenations, we propose Temporal Region–Phrase Alignment, a pretraining objective that aligns temporal anatomical representations with localized report phrases.
 
+<p align="center">
+  <a href="assets/task-overview.png">
+    <img src="assets/task-overview.png" alt="Overview of the grounded radiology tasks" width="49%">
+  </a>
+</p>
+
+<p align="center">
+  <a href="assets/method-region-phrase.png">
+    <img src="assets/method-region-phrase.png" alt="Temporal anatomical ROI encoding and region-phrase alignment" width="49%">
+  </a>
+  <a href="assets/method-architecture.png">
+    <img src="assets/method-architecture.png" alt="CheXGround architecture" width="49%">
+  </a>
+</p>
+
 ## Code
 
-Coming soon.
+Will be released soon, stay tuned!
 
 ## Citation
 
