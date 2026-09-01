@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  Adonay Demewez Gebremedhin<sup>1</sup> · <a href="https://scholar.google.com/citations?user=5oaOk_YAAAAJ&amp;hl=en">Wessam Shehieb</a><sup>1</sup> · Sara Alansari<sup>2</sup> · <a href="https://github.com/HamadYA">Mohamad Alansari</a><sup>3</sup> · Muzammal Naseer<sup>3,4</sup> · Sajid Javed<sup>3</sup> · Naoufel Werghi<sup>3</sup>
+  <a href="https://adonaydem.github.io/">Adonay Demewez Gebremedhin</a><sup>1</sup> · <a href="https://scholar.google.com/citations?user=5oaOk_YAAAAJ&amp;hl=en">Wessam Shehieb</a><sup>1</sup> · Sara Alansari<sup>2</sup> · <a href="https://github.com/HamadYA">Mohamad Alansari</a><sup>3</sup> · Muzammal Naseer<sup>3,4</sup> · Sajid Javed<sup>3</sup> · Naoufel Werghi<sup>3</sup>
 </p>
 
 <p align="center">
@@ -21,7 +21,7 @@
 </p>
 
 <p align="center">
-  <a href="https://arxiv.org/search/?query=CheXGround%3A+Anatomical+Region+Tokens+for+Grounded+Longitudinal+Chest+X-ray+Interpretation&amp;searchtype=title">📄 Paper</a>
+  <a href="https://arxiv.org/abs/2608.30758">📄 Paper</a>
   &nbsp;|&nbsp;
   <a href="https://adonaydem.github.io/chexground-website/">🌐 Project Page</a>
 </p>
@@ -52,10 +52,13 @@ Will be released soon, stay tuned!
 ## Citation
 
 ```bibtex
-@inproceedings{gebremedhin2026chexground,
-  title     = {{CheXGround}: Anatomical Region Tokens for Grounded Longitudinal Chest X-ray Interpretation},
-  author    = {Adonay Demewez Gebremedhin and Wessam Shehieb and Sara Alansari and Mohamad Alansari and Muzammal Naseer and Sajid Javed and Naoufel Werghi},
-  booktitle = {British Machine Vision Conference},
-  year      = {2026}
+@misc{gebremedhin2026chexgroundanatomicalregiontokens,
+  title={CheXGround: Anatomical Region Tokens for Grounded Longitudinal Chest X-ray Interpretation},
+  author={Adonay Demewez Gebremedhin and Wessam Shehieb and Sara Alansari and Mohamad Alansari and Muzammal Naseer and Sajid Javed and Naoufel Werghi},
+  year={2026},
+  eprint={2608.30758},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2608.30758},
 }
 ```
