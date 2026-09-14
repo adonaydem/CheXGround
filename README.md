@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="https://adonaydem.github.io/">Adonay Demewez Gebremedhin</a><sup>1</sup> · <a href="https://scholar.google.com/citations?user=5oaOk_YAAAAJ&amp;hl=en">Wessam Shehieb</a><sup>1</sup> · Sara Alansari<sup>2</sup> · <a href="https://github.com/HamadYA">Mohamad Alansari</a><sup>3</sup> · Muzammal Naseer<sup>3,4</sup> · Sajid Javed<sup>3</sup> · Naoufel Werghi<sup>3</sup>
+  <a href="https://adonaydem.github.io/">Adonay Demewez Gebremedhin</a><sup>1</sup> · <a href="https://scholar.google.com/citations?user=5oaOk_YAAAAJ&amp;hl=en">Wessam Shehieb</a><sup>1</sup> · <a href="https://scholar.google.com/citations?user=h1w_MmAAAAAJ">Sara Alansari</a><sup>2</sup> · <a href="https://scholar.google.com/citations?user=dLQ1jLkAAAAJ">Mohamad Alansari</a><sup>3</sup> · <a href="https://scholar.google.com/citations?user=tM9xKA8AAAAJ">Muzammal Naseer</a><sup>3,4</sup> · <a href="https://scholar.google.com/citations?user=6qvbEhUAAAAJ">Sajid Javed</a><sup>3</sup> · <a href="https://scholar.google.com/citations?user=G_2Xpm0AAAAJ">Naoufel Werghi</a><sup>3</sup>
 </p>
 
 <p align="center">
@@ -89,14 +89,14 @@ hf download adonaydem/CheXGround --local-dir checkpoints/chexground
 Set the data paths in `chexground/data/configs/` and replace the checkpoint paths
 below. 
 
-### S0: Anatomical region detection
+### Stage 0: Anatomical region detection
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 bash scripts/det_pretrain.sh \
   output/s0 chexground/data/configs/det_pretrain.py
 ```
 
-### S1: Temporal region–phrase alignment
+### Stage 1: Temporal region–phrase alignment
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 bash scripts/temporal_grounding_pretrain.sh \
@@ -105,7 +105,7 @@ CUDA_VISIBLE_DEVICES=0 bash scripts/temporal_grounding_pretrain.sh \
   /path/to/text-encoder
 ```
 
-### S2: Vision-language pretraining
+### Stage 2: Vision-language pretraining
 
 ```bash
 CUDA_VISIBLE_DEVICES=0,1 bash scripts/vl_pretrain.sh \
@@ -113,7 +113,7 @@ CUDA_VISIBLE_DEVICES=0,1 bash scripts/vl_pretrain.sh \
   output/s2 chexground/data/configs/chexground_pretrain.py
 ```
 
-### S3: Instruction tuning
+### Stage 3: Instruction tuning
 
 ```bash
 CUDA_VISIBLE_DEVICES=0,1 bash scripts/vl_finetune.sh \
@@ -153,7 +153,7 @@ The code in this repository is released under the [Apache License 2.0](LICENSE).
 Third-party components and pretrained models remain subject to their respective
 licenses.
 
-## Citation
+## If you find this work useful, please cite us!
 
 ```bibtex
 @misc{gebremedhin2026chexgroundanatomicalregiontokens,
