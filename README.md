@@ -101,8 +101,7 @@ CUDA_VISIBLE_DEVICES=0 bash scripts/det_pretrain.sh \
 ```bash
 CUDA_VISIBLE_DEVICES=0 bash scripts/temporal_grounding_pretrain.sh \
   /path/to/s0-checkpoint output/s1 /path/to/region-annotations \
-  chexground/data/configs/temporal_grounding_mimic.py \
-  /path/to/text-encoder
+  chexground/data/configs/temporal_grounding_mimic.py
 ```
 
 ### Stage 2: Vision-language pretraining

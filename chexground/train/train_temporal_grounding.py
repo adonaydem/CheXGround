@@ -223,7 +223,7 @@ class TemporalGroundingTrainer(Trainer):
 @dataclass
 class ModelArguments:
     ddetr_checkpoint: str = field(default=None)
-    text_encoder_name: str = field(default="/path/to/text-encoder")
+    text_encoder_name: str = field(default="microsoft/BiomedVLP-BioViL-T")
     vis_encoder_name: Optional[str] = field(default=None)
     num_classes: int = field(default=14)
     roi_output_size: int = field(default=7)
