@@ -1,0 +1,33 @@
+{
+  "anatomy_classes": [
+    "abdomen",
+    "aortic arch",
+    "cardiac silhouette",
+    "carina",
+    "cavoatrial junction",
+    "left apical zone",
+    "left clavicle",
+    "left costophrenic angle",
+    "left hemidiaphragm",
+    "left hilar structures",
+    "left lower lung zone",
+    "left lung",
+    "left mid lung zone",
+    "left upper lung zone",
+    "mediastinum",
+    "right apical zone",
+    "right atrium",
+    "right clavicle",
+    "right costophrenic angle",
+    "right hemidiaphragm",
+    "right hilar structures",
+    "right lower lung zone",
+    "right lung",
+    "right mid lung zone",
+    "right upper lung zone",
+    "spine",
+    "svc",
+    "trachea",
+    "upper mediastinum"
+  ]
+}

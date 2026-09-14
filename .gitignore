@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+
+# Log
+*.log
+*.log.*
+# *.json
+
+# Data
+!**/alpaca-data-conversation.json
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Other
+.DS_Store
+Thumbs.db
+wandb/
+output/
+
+checkpoints/
+ckpts*/
+
+/docs/
