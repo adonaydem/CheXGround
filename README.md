@@ -53,7 +53,7 @@ We introduce CheXGround, a region-grounded longitudinal chest X-ray language mod
 
 ## Installation
 
-The setup uses Python 3.10, PyTorch 2.4.0, and CUDA 12.1.
+The setup was ran on Python 3.10, PyTorch 2.4.0, and CUDA 12.1.
 
 
 ```bash
