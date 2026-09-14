@@ -123,7 +123,7 @@ CUDA_VISIBLE_DEVICES=0,1 bash scripts/vl_finetune.sh \
 ## Inference
 
 Save input data in `data.jsonl`. List images chronologically, with the current
-image last; a single current image is also supported.
+image last. A single current image is also supported.
 
 ```jsonl
 {"id": "example", "image_refs": ["/path/to/prior.png", "/path/to/current.png"], "prompt": "Describe the interval changes."}
