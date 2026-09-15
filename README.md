@@ -93,14 +93,14 @@ below.
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 bash scripts/det_pretrain.sh \
-  output/s0 chexground/data/configs/det_pretrain.py
+  output/stage-0 chexground/data/configs/det_pretrain.py
 ```
 
 ### Stage 1: Temporal region–phrase alignment
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 bash scripts/temporal_grounding_pretrain.sh \
-  /path/to/s0-checkpoint output/s1 /path/to/region-annotations \
+  /path/to/stage-0-checkpoint output/stage-1 /path/to/region-annotations \
   chexground/data/configs/temporal_grounding_mimic.py
 ```
 
@@ -108,15 +108,15 @@ CUDA_VISIBLE_DEVICES=0 bash scripts/temporal_grounding_pretrain.sh \
 Our base VLM model is Meditron-7B finetuned by Libra: https://huggingface.co/X-iZhang/libra-v1.0-7b . Projectors are freshly initialized.
 ```bash
 CUDA_VISIBLE_DEVICES=0,1 bash scripts/vl_pretrain.sh \
-  /path/to/pretrained-vlm /path/to/s1-checkpoint \
-  output/s2 chexground/data/configs/chexground_pretrain.py
+  /path/to/pretrained-vlm /path/to/stage-1-checkpoint \
+  output/stage-2 chexground/data/configs/chexground_pretrain.py
 ```
 
 ### Stage 3: Instruction tuning
 
 ```bash
 CUDA_VISIBLE_DEVICES=0,1 bash scripts/vl_finetune.sh \
-  /path/to/s2-checkpoint output/s3 \
+  /path/to/stage-2-checkpoint output/stage-3 \
   chexground/data/configs/chexground_finetune.py
 ```
 
