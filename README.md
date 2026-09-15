@@ -105,7 +105,7 @@ CUDA_VISIBLE_DEVICES=0 bash scripts/temporal_grounding_pretrain.sh \
 ```
 
 ### Stage 2: Vision-language pretraining
-
+Our base VLM model is Meditron-7B finetuned by Libra: https://huggingface.co/X-iZhang/libra-v1.0-7b . Projectors are freshly initialized.
 ```bash
 CUDA_VISIBLE_DEVICES=0,1 bash scripts/vl_pretrain.sh \
   /path/to/pretrained-vlm /path/to/s1-checkpoint \
