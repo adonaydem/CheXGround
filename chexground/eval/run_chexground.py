@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run CheXGround inference from self-contained JSON or JSONL requests."""
+"""Run CheXGround inference"""
 
 import argparse
 import contextlib
@@ -283,7 +283,7 @@ def run_one(
 def parse_args():
     parser = argparse.ArgumentParser(description="Run a CheXGround checkpoint with an optional LoRA adapter over JSON/JSONL requests.")
     parser.add_argument("--base-model", required=True, help="CheXGround base or merged model path.")
-    parser.add_argument("--lora-path", help="Optional CheXGround LoRA adapter path; omit for a merged model.")
+    parser.add_argument("--lora-path", help="Optional CheXGround LoRA adapter path. Ignore if using the official model.")
     parser.add_argument("--input", required=True, help="Input JSON or JSONL request file.")
     parser.add_argument("--output", help="Optional JSONL output file; defaults to stdout.")
     parser.add_argument("--conv-template", default=DEFAULT_CONV_TEMPLATE)
@@ -329,10 +329,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-# Input: one JSON object, a JSON array of objects, or JSONL with one object per line.
-# image_refs: non-empty chronological paths, oldest prior first and current last;
-#             at most the checkpoint's max_temporal_frames (normally two).
-# prompt: a non-empty instruction or a prepared current-first visual prompt.
-# Optional id is copied unchanged; ground_truth is normalized and never sent to the model.
-# Absolute paths are accepted; relative paths are resolved from the input file's directory.
-# Example: {"image_refs": ["prior.png", "current.png"], "prompt": "Describe interval change."}
