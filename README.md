@@ -84,6 +84,28 @@ Download the full [CheXGround model](https://huggingface.co/adonaydem/CheXGround
 hf download adonaydem/CheXGround --local-dir checkpoints/chexground
 ```
 
+## Inference
+
+Save input data in `data.jsonl`. List images chronologically, with the current
+image last. A single current image is also supported.
+
+```jsonl
+{"id": "example", "image_refs": ["/path/to/prior.png", "/path/to/current.png"], "prompt": "Describe the interval changes."}
+```
+
+```bash
+CUDA_VISIBLE_DEVICES=0 bash scripts/run_chexground.sh --model \
+  checkpoints/chexground data.jsonl predictions.jsonl
+```
+
+For batched generation:
+
+```bash
+CUDA_VISIBLE_DEVICES=0 bash scripts/run_chexground_batched.sh --model \
+  checkpoints/chexground data.jsonl predictions.jsonl --batch-size 2
+```
+
+
 ## Training
 
 Set the data paths in `chexground/data/configs/` and replace the checkpoint paths
@@ -120,37 +142,9 @@ CUDA_VISIBLE_DEVICES=0,1 bash scripts/vl_finetune.sh \
   chexground/data/configs/chexground_finetune.py
 ```
 
-## Inference
-
-Save input data in `data.jsonl`. List images chronologically, with the current
-image last. A single current image is also supported.
-
-```jsonl
-{"id": "example", "image_refs": ["/path/to/prior.png", "/path/to/current.png"], "prompt": "Describe the interval changes."}
-```
-
-```bash
-CUDA_VISIBLE_DEVICES=0 bash scripts/run_chexground.sh --model \
-  checkpoints/chexground data.jsonl predictions.jsonl
-```
-
-For batched generation with predicted anatomical regions and boxes:
-
-```bash
-CUDA_VISIBLE_DEVICES=0 bash scripts/run_chexground_batched.sh --model \
-  checkpoints/chexground data.jsonl predictions.jsonl --batch-size 2
-```
-
-
 ## Acknowledgements
 
 CheXGround is built upon [Libra](https://github.com/X-iZhang/Libra) and [Groma](https://github.com/FoundationVision/Groma), we thank the authors for their contributions.
-
-## License
-
-The code in this repository is released under the [Apache License 2.0](LICENSE).
-Third-party components and pretrained models remain subject to their respective
-licenses.
 
 ## If you find this work useful, please cite us!
 
