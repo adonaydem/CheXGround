@@ -53,7 +53,7 @@ We introduce CheXGround, a region-grounded longitudinal chest X-ray language mod
 
 ## Installation
 
-The setup was ran on Python 3.10, PyTorch 2.4.0, and CUDA 12.1.
+The setup was ran on Python 3.10.
 
 
 ```bash
@@ -72,8 +72,6 @@ Build the bundled MMCV CUDA operators for your GPU:
 
 ```bash
 bash scripts/build_mmcv.sh
-python -m pip check
-python -m chexground.eval.run_chexground --help
 ```
 
 ## Model
@@ -94,14 +92,14 @@ image last. A single current image is also supported.
 ```
 
 ```bash
-CUDA_VISIBLE_DEVICES=0 bash scripts/run_chexground.sh --model \
+bash scripts/run_chexground.sh --model \
   checkpoints/chexground data.jsonl predictions.jsonl
 ```
 
 For batched generation:
 
 ```bash
-CUDA_VISIBLE_DEVICES=0 bash scripts/run_chexground_batched.sh --model \
+bash scripts/run_chexground_batched.sh --model \
   checkpoints/chexground data.jsonl predictions.jsonl --batch-size 2
 ```
 
@@ -114,14 +112,14 @@ below.
 ### Stage 0: Anatomical region detection
 
 ```bash
-CUDA_VISIBLE_DEVICES=0 bash scripts/det_pretrain.sh \
+bash scripts/det_pretrain.sh \
   output/stage-0 chexground/data/configs/det_pretrain.py
 ```
 
 ### Stage 1: Temporal region–phrase alignment
 
 ```bash
-CUDA_VISIBLE_DEVICES=0 bash scripts/temporal_grounding_pretrain.sh \
+bash scripts/temporal_grounding_pretrain.sh \
   /path/to/stage-0-checkpoint output/stage-1 /path/to/region-annotations \
   chexground/data/configs/temporal_grounding_mimic.py
 ```
@@ -129,7 +127,7 @@ CUDA_VISIBLE_DEVICES=0 bash scripts/temporal_grounding_pretrain.sh \
 ### Stage 2: Vision-language pretraining
 Our base VLM model is Meditron-7B finetuned by Libra: https://huggingface.co/X-iZhang/libra-v1.0-7b . Projectors are freshly initialized.
 ```bash
-CUDA_VISIBLE_DEVICES=0,1 bash scripts/vl_pretrain.sh \
+bash scripts/vl_pretrain.sh \
   /path/to/pretrained-vlm /path/to/stage-1-checkpoint \
   output/stage-2 chexground/data/configs/chexground_pretrain.py
 ```
@@ -137,7 +135,7 @@ CUDA_VISIBLE_DEVICES=0,1 bash scripts/vl_pretrain.sh \
 ### Stage 3: Instruction tuning
 
 ```bash
-CUDA_VISIBLE_DEVICES=0,1 bash scripts/vl_finetune.sh \
+bash scripts/vl_finetune.sh \
   /path/to/stage-2-checkpoint output/stage-3 \
   chexground/data/configs/chexground_finetune.py
 ```
@@ -149,7 +147,7 @@ CheXGround is built upon [Libra](https://github.com/X-iZhang/Libra) and [Groma](
 ## If you find this work useful, please cite us!
 
 ```bibtex
-@misc{gebremedhin2026chexgroundanatomicalregiontokens,
+@misc{chexground,
   title={CheXGround: Anatomical Region Tokens for Grounded Longitudinal Chest X-ray Interpretation},
   author={Adonay Demewez Gebremedhin and Wessam Shehieb and Sara Alansari and Mohamad Alansari and Muzammal Naseer and Sajid Javed and Naoufel Werghi},
   year={2026},
@@ -167,9 +165,6 @@ CheXGround is intended for research and educational use, including:
 - Studying grounded report generation and visual question answering for chest X-rays.
 - Evaluating anatomical localization and reasoning about changes between prior and current studies.
 - Developing and comparing multimodal learning methods on appropriately authorized research data.
-
-**CheXGround is not meant to be used for clinical practice.**
-
 
 ## Disclaimer
 
