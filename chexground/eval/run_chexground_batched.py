@@ -9,7 +9,8 @@ import torch
 
 from chexground.eval.run_chexground import (
     DEFAULT_CONV_TEMPLATE, DEFAULT_TOKENS, STAGE3_REGION_TOKENS, VISUAL_PROMPT_PREFIX_RE,
-    conv_templates, frame_token_name, load_model_and_tokenizer, normalize_text, preprocess_images, read_entries,
+    conv_templates, frame_token_name, load_anatomy_classes, load_model_and_tokenizer, normalize_text, predicted_regions, preprocess_images,
+    read_entries,
 )
 
 
@@ -132,25 +133,13 @@ def run_batch(items, *, model, tokenizer, image_processor, device, dtype, args, 
             generated[index] = token_ids[:token_ids.index(tokenizer.eos_token_id) + 1]
     raw_answers = tokenizer.batch_decode(generated, skip_special_tokens=False)
     answers = tokenizer.batch_decode(generated, skip_special_tokens=True)
-    token_to_slot = {token_id: slot for slot, token_id in enumerate(base_model.region_index_token_ids)}
     results = []
     for index, item in enumerate(items):
-        regions = []
-        for token_id in generated[index]:
-            if token_id not in token_to_slot:
-                continue
-            slot = token_to_slot[token_id]
-            if not valid_boxes[index, slot]:
-                continue
-            region = {"tag": f"r{slot}", "slot_id": slot, "bbox": boxes[index, slot].tolist()}
-            if anatomy_classes:
-                region["region"] = anatomy_classes[slot]
-            regions.append(region)
+        regions = predicted_regions(generated[index], base_model.region_index_token_ids, boxes[index], valid_boxes[index], anatomy_classes)
         results.append({
             "index": item["index"], "question_id": item["question_id"], "image_refs": item["image_refs"], "prompt": item["prompt"],
             "text": answers[index].strip(), "prediction_raw": raw_answers[index].strip(), "predicted_regions": regions,
-            "predicted_boxes": [region["bbox"] for region in regions], "bbox_format": "cxcywh", "bbox_normalized": True,
-            "bbox_coordinate_space": "processed_image", "image_geometry_mode": args.image_geometry_mode,
+            "predicted_boxes": [region["bbox"] for region in regions],
         })
     return results
 
@@ -190,16 +179,7 @@ def parse_args(argv=None):
 def main():
     args = parse_args()
     entries, input_dir = read_entries(args.input)
-    anatomy_classes = []
-    if args.anatomy_json:
-        with Path(args.anatomy_json).expanduser().open(encoding="utf-8") as handle:
-            payload = json.load(handle)
-        anatomy_classes = payload["anatomy_classes"] if isinstance(payload, dict) else payload
-        if not isinstance(anatomy_classes, list) or any(not isinstance(name, str) or not normalize_text(name) for name in anatomy_classes):
-            raise ValueError("Anatomy classes must be an ordered list of non-empty names.")
-        anatomy_classes = [normalize_text(name).lower() for name in anatomy_classes]
-        if len(anatomy_classes) != len(STAGE3_REGION_TOKENS) or len(set(anatomy_classes)) != len(anatomy_classes):
-            raise ValueError("Anatomy classes must contain one unique name per checkpoint slot.")
+    anatomy_classes = load_anatomy_classes(args.anatomy_json)
     model, tokenizer, image_processor, device, dtype, max_temporal_frames = load_model_and_tokenizer(args)
     groups = {}
     for index, entry in enumerate(entries):

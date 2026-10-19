@@ -196,9 +196,38 @@ def preprocess_images(image_paths: Sequence[str], image_processor, image_geometr
     return image_tensor, pixel_mask
 
 
+def load_anatomy_classes(anatomy_json: Optional[str]) -> List[str]:
+    if not anatomy_json:
+        return []
+    with pathlib.Path(anatomy_json).expanduser().open(encoding="utf-8") as handle:
+        payload = json.load(handle)
+    anatomy_classes = payload["anatomy_classes"] if isinstance(payload, dict) else payload
+    if not isinstance(anatomy_classes, list) or any(not isinstance(name, str) or not normalize_text(name) for name in anatomy_classes):
+        raise ValueError("Anatomy classes must be an ordered list of non-empty names.")
+    anatomy_classes = [normalize_text(name).lower() for name in anatomy_classes]
+    if len(anatomy_classes) != len(STAGE3_REGION_TOKENS) or len(set(anatomy_classes)) != len(anatomy_classes):
+        raise ValueError("Anatomy classes must contain one unique name per checkpoint slot.")
+    return anatomy_classes
+
+
+def predicted_regions(token_ids: Sequence[int], region_token_ids: Sequence[int], boxes: torch.Tensor, valid_boxes: torch.Tensor,
+                      anatomy_classes: Sequence[str]) -> List[Dict[str, Any]]:
+    token_to_slot = {token_id: slot for slot, token_id in enumerate(region_token_ids)}
+    regions = []
+    for token_id in token_ids:
+        slot = token_to_slot.get(token_id)
+        if slot is None or not valid_boxes[slot]:
+            continue
+        region = {"tag": f"r{slot}", "slot_id": slot, "bbox": boxes[slot].tolist()}
+        if anatomy_classes:
+            region["region"] = anatomy_classes[slot]
+        regions.append(region)
+    return regions
+
+
 def run_one(
-    entry: Dict[str, Any], *, input_dir: pathlib.Path, model, tokenizer, image_processor, device: torch.device, dtype: torch.dtype, args,
-    max_temporal_frames: int
+    entry: Dict[str, Any], index: int, *, input_dir: pathlib.Path, model, tokenizer, image_processor, device: torch.device, dtype: torch.dtype, args,
+    anatomy_classes: Sequence[str], max_temporal_frames: int
 ) -> Dict[str, Any]:
     image_refs = entry.get("image_refs")
     if not isinstance(image_refs, list) or not image_refs:
@@ -265,18 +294,30 @@ def run_one(
         "pad_token_id": tokenizer.pad_token_id, "eos_token_id": tokenizer.eos_token_id
     }
     generation_kwargs = {key: value for key, value in generation_kwargs.items() if value is not None}
+    base_model = model.get_base_model() if args.lora_path else model
     with torch.no_grad(), (
         torch.autocast(device_type="cuda", dtype=dtype) if device.type == "cuda" and dtype in (torch.float16, torch.bfloat16) else contextlib.nullcontext()
     ):
+        backbone = base_model._extract_shared_backbone_outputs(batch["images"], batch["temporal_lengths"])
+        roi_outputs = base_model.grpa.extract_roi_features(
+            images=batch["images"], pixel_mask=batch["pixel_mask"], temporal_lengths=batch["temporal_lengths"], backbone_outputs=backbone
+        )
+        boxes = roi_outputs["pred_boxes"][0].detach().cpu()
+        valid_boxes = roi_outputs["roi_valid_mask"][0].detach().cpu()
+        del roi_outputs, backbone
         output_ids = model.generate(**generation_kwargs)
 
-    generated_ids = output_ids[0, batch["input_ids"].shape[1]:].detach().cpu()
-    prediction_raw = tokenizer.decode(generated_ids.tolist(), skip_special_tokens=False).strip()
-    prediction = tokenizer.decode(generated_ids.tolist(), skip_special_tokens=True).strip()
+    generated_ids = output_ids[0, batch["input_ids"].shape[1]:].detach().cpu().tolist()
+    prediction_raw = tokenizer.decode(generated_ids, skip_special_tokens=False).strip()
+    prediction = tokenizer.decode(generated_ids, skip_special_tokens=True).strip()
+    regions = predicted_regions(generated_ids, base_model.region_index_token_ids, boxes, valid_boxes, anatomy_classes)
 
-    result = {"image_refs": image_paths, "prompt": user_text, "ground_truth": ground_truth, "prediction": prediction, "prediction_raw": prediction_raw}
-    if "id" in entry:
-        result["id"] = entry["id"]
+    result = {
+        "index": index, "question_id": entry.get("question_id", entry.get("id", index)), "image_refs": image_paths, "prompt": user_text,
+        "text": prediction, "prediction_raw": prediction_raw, "predicted_regions": regions, "predicted_boxes": [region["bbox"] for region in regions]
+    }
+    if ground_truth:
+        result["ground_truth"] = ground_truth
     return result
 
 
@@ -286,6 +327,7 @@ def parse_args():
     parser.add_argument("--lora-path", help="Optional CheXGround LoRA adapter path. Ignore if using the official model.")
     parser.add_argument("--input", required=True, help="Input JSON or JSONL request file.")
     parser.add_argument("--output", help="Optional JSONL output file; defaults to stdout.")
+    parser.add_argument("--anatomy-json", help="Ordered anatomy class list matching the checkpoint slots.")
     parser.add_argument("--conv-template", default=DEFAULT_CONV_TEMPLATE)
     parser.add_argument("--image-geometry-mode", default="one_side_pad", choices=("center_pad", "one_side_pad", "square_resize"))
     parser.add_argument("--model-max-length", type=int, default=2048)
@@ -309,6 +351,7 @@ def parse_args():
 def main():
     args = parse_args()
     entries, input_dir = read_entries(args.input)
+    anatomy_classes = load_anatomy_classes(args.anatomy_json)
     model, tokenizer, image_processor, device, dtype, max_temporal_frames = load_model_and_tokenizer(args)
     print(
         f"[chexground] base={args.base_model} lora={args.lora_path} "
@@ -318,10 +361,9 @@ def main():
     with open(args.output, "w", encoding="utf-8") if args.output else contextlib.nullcontext(sys.stdout) as output_file:
         for index, entry in enumerate(entries):
             result = run_one(
-                entry, input_dir=input_dir, model=model, tokenizer=tokenizer, image_processor=image_processor, device=device, dtype=dtype, args=args,
-                max_temporal_frames=max_temporal_frames
+                entry, index, input_dir=input_dir, model=model, tokenizer=tokenizer, image_processor=image_processor, device=device, dtype=dtype,
+                args=args, anatomy_classes=anatomy_classes, max_temporal_frames=max_temporal_frames
             )
-            result["index"] = index
             output_file.write(json.dumps(result, ensure_ascii=False) + "\n")
             output_file.flush()
 
