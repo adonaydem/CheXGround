@@ -64,6 +64,7 @@ conda activate chexground
 
 python -m pip install "setuptools==80.10.2" wheel
 python -m pip install torch==2.4.0 torchvision==0.19.0 --index-url https://download.pytorch.org/whl/cu121
+# These assume you want to run training. For inference, you can install selectively.
 python -m pip install --no-build-isolation -e ".[train,eval]"
 python -m pip install --no-deps "https://github.com/Dao-AILab/flash-attention/releases/download/v2.7.4.post1/flash_attn-2.7.4.post1%2Bcu12torch2.4cxx11abiFALSE-cp310-cp310-linux_x86_64.whl"
 ```
